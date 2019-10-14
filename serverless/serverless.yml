@@ -3,7 +3,7 @@ provider:
   name: aws
   runtime: nodejs10.x
   apiKeys:
-    - gatsbyPluginDataProtect
+    - gatsbyPluginDataProtectApiKey
 #  environment:
 functions:
   login:

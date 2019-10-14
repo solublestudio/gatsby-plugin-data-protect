@@ -18,9 +18,9 @@ function extractUrls(output) {
     return [];
 }
 
-function extractToken(output) {
-    const expression = /gatsbyPluginDataProtect: (.+)/gm;
-    const results = expression.exec(output);
+function extractToken(output, tokenName = 'gatsbyPluginDataProtectApiKey') {
+    const regex = new RegExp(`${tokenName}: (.+)`, 'gm');
+    const results = regex.exec(output);
 
     if (results && results.length > 1) {
         return results[1];
@@ -123,6 +123,13 @@ class ServerlessUtil {
             slient: true
         });
 
+        replace({
+            regex: `gatsbyPluginDataProtectApiKey`,
+            replacement: `${this.__options.DATA_PROTECT_SERVER_NAME}-${this.__stage}-apikey`,
+            paths: [ `${this.__buildFolder}/serverless.yml` ],
+            slient: true
+        });
+
         if (this.__options.DATA_PROTECT_MAIL_TEMPLATE) {
             fse.copySync(
                 path.resolve(this.__options.DATA_PROTECT_MAIL_TEMPLATE),
@@ -145,7 +152,7 @@ class ServerlessUtil {
                 }
             );
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             return null;
         }
     }
@@ -218,7 +225,7 @@ class ServerlessUtil {
             });
         }
 
-        const token = extractToken(stdout);
+        const token = extractToken(stdout, `${this.__options.DATA_PROTECT_SERVER_NAME}-${this.__stage}-apikey`);
 
         if (token) {
             this.__token = token;

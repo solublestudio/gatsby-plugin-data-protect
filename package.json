@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-data-protect",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "main": "index.js",
   "repository": "git@github.com:solublestudio/gatsby-plugin-data-protect.git",
   "author": "Soluble Studio <tech@solublestudio.com>",

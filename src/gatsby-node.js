@@ -42,7 +42,7 @@ exports.onPreInit = (data, pluginOptions, cb) => {
     cb();
 }
 
-exports.onCreatePage = ({ page, actions }, { data_protect_keys = [], login_path = 'login', loading_component = require.resolve(__dirname, 'Loader.js') }, cb) => {
+exports.onCreatePage = ({ page, actions }, { data_protect_keys = [], login_path = 'login', loading_component = require.resolve(`${__dirname}/Loader`) }, cb) => {
     const { createPage, deletePage } = actions;
 
     let recreatePage = false;
