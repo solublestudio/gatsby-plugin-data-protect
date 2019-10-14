@@ -18,5 +18,17 @@
   "peerDependencies": {
     "gatsby": "^2.15.34",
     "react": "^16.10.2"
+  },
+  "scripts": {
+    "build": "babel src --out-dir .",
+    "prepare": "NODE_ENV=production npm run build",
+    "watch": "babel -w src --out-dir .",
+    "clean": "rimraf *.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "babel-preset-gatsby-package": "^0.2.8",
+    "rimraf": "^3.0.0"
   }
 }

@@ -1,64 +1,99 @@
-export const getStoredValue = key => (window.localStorage.getItem(key));
+"use strict";
 
-export const storeValue = (key, value) => (window.localStorage.setItem(key, value));
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-export const removeValue = (key = null) => (key ? window.localStorage.removeItem(key) : window.localStorage.clear());
+exports.__esModule = true;
+exports.hookLoginForm = exports.dispatchEvent = exports.getNewProps = exports.makeLoginCall = exports.removeValue = exports.storeValue = exports.getStoredValue = void 0;
 
-export const makeLoginCall = (url, params, successCallback, errorCallback) => {
-    fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(params),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(res => res.json())
-    .catch(errorCallback)
-    .then(successCallback);
-}
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 
-export const getNewProps = (props, sensitiveKeys) => {
-    let newProps = { ...props };
-    
-    Object.keys(sensitiveKeys).forEach(dataKey => {
-        const sensitiveData = JSON.parse(getStoredValue(sensitiveKeys[dataKey]));
-        newProps.pageContext[dataKey] = sensitiveData;
-    });
-
-    return newProps;
-}
-
-export const dispatchEvent = (dom, eventName, data = {}) => {
-    const newEvent = new CustomEvent(eventName, data);
-    dom.dispatchEvent(newEvent);
+var getStoredValue = function getStoredValue(key) {
+  return window.localStorage.getItem(key);
 };
 
-export const hookLoginForm = (loginUrl, version) => {
-    const form = document.getElementById('data-protect-form');
-    console.log(loginUrl, version);
-    if (!form) {
-        return;
+exports.getStoredValue = getStoredValue;
+
+var storeValue = function storeValue(key, value) {
+  return window.localStorage.setItem(key, value);
+};
+
+exports.storeValue = storeValue;
+
+var removeValue = function removeValue(key) {
+  if (key === void 0) {
+    key = null;
+  }
+
+  return key ? window.localStorage.removeItem(key) : window.localStorage.clear();
+};
+
+exports.removeValue = removeValue;
+
+var makeLoginCall = function makeLoginCall(url, params, successCallback, errorCallback) {
+  fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(params),
+    headers: {
+      'Content-Type': 'application/json'
     }
+  }).then(function (res) {
+    return res.json();
+  }).catch(errorCallback).then(successCallback);
+};
 
-    form.addEventListener('submit', function(e) {
-        dispatchEvent(form, 'loading');
-        e.preventDefault();
+exports.makeLoginCall = makeLoginCall;
 
-        if (form.elements && form.elements.email && form.elements.email.value) {
-            makeLoginCall(
-                loginUrl,
-                { email: form.elements.email.value, version },
-                response => {
-                    if (!response || response.msg == 'forbidden') {
-                        dispatchEvent(form, 'error', response);
-                    } else {
-                        dispatchEvent(form, 'success', response);
-                    }
-                },
-                error => {
-                    dispatchEvent(form, 'error', { msg: 'error' });
-                }
-            );
+var getNewProps = function getNewProps(props, sensitiveKeys) {
+  var newProps = (0, _extends2.default)({}, props);
+  Object.keys(sensitiveKeys).forEach(function (dataKey) {
+    var sensitiveData = JSON.parse(getStoredValue(sensitiveKeys[dataKey]));
+    newProps.pageContext[dataKey] = sensitiveData;
+  });
+  return newProps;
+};
+
+exports.getNewProps = getNewProps;
+
+var dispatchEvent = function dispatchEvent(dom, eventName, data) {
+  if (data === void 0) {
+    data = {};
+  }
+
+  var newEvent = new CustomEvent(eventName, data);
+  dom.dispatchEvent(newEvent);
+};
+
+exports.dispatchEvent = dispatchEvent;
+
+var hookLoginForm = function hookLoginForm(loginUrl, version) {
+  var form = document.getElementById('data-protect-form');
+  console.log(loginUrl, version);
+
+  if (!form) {
+    return;
+  }
+
+  form.addEventListener('submit', function (e) {
+    dispatchEvent(form, 'loading');
+    e.preventDefault();
+
+    if (form.elements && form.elements.email && form.elements.email.value) {
+      makeLoginCall(loginUrl, {
+        email: form.elements.email.value,
+        version: version
+      }, function (response) {
+        if (!response || response.msg == 'forbidden') {
+          dispatchEvent(form, 'error', response);
+        } else {
+          dispatchEvent(form, 'success', response);
         }
-    });
-}
+      }, function (error) {
+        dispatchEvent(form, 'error', {
+          msg: 'error'
+        });
+      });
+    }
+  });
+};
+
+exports.hookLoginForm = hookLoginForm;
