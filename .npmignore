@@ -3,3 +3,5 @@ yarn.lock
 pacakge-lock.json
 src
 .serverless
+.babelrc
+.DS_Store
