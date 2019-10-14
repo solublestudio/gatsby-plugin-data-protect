@@ -1,0 +1,14 @@
+{
+  "name": "gatsby-plugin-data-protect-server",
+  "version": "0.0.0",
+  "main": "handler.js",
+  "author": "Soluble Studio <tech@solublestudio.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
+    "airtable": "^0.7.1"
+  },
+  "devDependencies": {
+    "serverless": "^1.53.0"
+  }
+}

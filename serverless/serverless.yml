@@ -1,0 +1,21 @@
+service: gatsby-plugin-data-protect
+provider:
+  name: aws
+  runtime: nodejs10.x
+  apiKeys:
+    - gatsbyPluginDataProtect
+#  environment:
+functions:
+  login:
+    handler: handler.login
+    events:
+      - http:
+          path: login
+          method: post
+  version:
+    handler: handler.version
+    events:
+      - http:
+          path: version
+          method: get
+          private: true

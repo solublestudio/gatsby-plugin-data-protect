@@ -1,0 +1,22 @@
+{
+  "name": "gatsby-plugin-data-protect",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "git@github.com:solublestudio/gatsby-plugin-data-protect.git",
+  "author": "Soluble Studio <tech@solublestudio.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
+    "airtable": "^0.7.1",
+    "dotenv": "^8.1.0",
+    "fs-extra": "^8.1.0",
+    "replace": "^1.1.1",
+    "serverless": "^1.53.0",
+    "sync-request": "^6.1.0",
+    "uuid": "^3.3.3"
+  },
+  "peerDependencies": {
+    "gatsby": "^2.15.34",
+    "react": "^16.10.2"
+  }
+}
