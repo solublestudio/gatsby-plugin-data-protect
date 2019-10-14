@@ -4,6 +4,14 @@
   "main": "index.js",
   "repository": "git@github.com:solublestudio/gatsby-plugin-data-protect.git",
   "author": "Soluble Studio <tech@solublestudio.com>",
+  "bugs": {
+    "url": "https://github.com/solublestudio/gatsby-plugin-data-protect/issues"
+  },
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "data protect"
+  ],
   "license": "MIT",
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
