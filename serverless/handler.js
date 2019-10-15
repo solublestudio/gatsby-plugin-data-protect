@@ -7,6 +7,10 @@ const versions = require('./versions.json');
 
 const getReponse = (statusCode = 200, body = {}) => ({
     statusCode,
+    headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+    },
     body: JSON.stringify(body)
 });
 

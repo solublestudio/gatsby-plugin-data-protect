@@ -41,9 +41,9 @@ function getVersionsData(url, token) {
 class ServerlessUtil {
     constructor() {
         this.__init = false;
-        this.__serverlessCmd = 'serverless';
+        this.__serverlessCmd = './node_modules/.bin/serverless';
         this.__baseFolder = path.resolve(__dirname, 'serverless');
-        this.__buildFolder = path.resolve(__dirname, '.serverless');
+        this.__buildFolder = path.resolve(__dirname, `.serverless${uuid().slice(0,6)}`);
         this.__urls = { 
             login: '/___dataprotect/login', 
             version: null
@@ -148,7 +148,8 @@ class ServerlessUtil {
                 { 
                     cwd: this.__buildFolder,
                     encoding: 'utf8',
-                    stdio: 'ignore'
+                    stdio: 'ignore',
+                    env: process.env
                 }
             );
         } catch (error) {
@@ -158,6 +159,8 @@ class ServerlessUtil {
     }
 
     fetchApiData() {
+        this.configCredentials();
+
         const params = [
             `--region ${this.__options.DATA_PROTECT_SERVER_REGION}`,
             `--stage ${this.__stage}`
@@ -187,22 +190,32 @@ class ServerlessUtil {
         );
     }
 
-    publish() {
+    getProfileName() {
+        return `build_${this.__options.DATA_PROTECT_SERVER_NAME.replace(/-/g, "")}`;
+    }
+
+    configCredentials() {
         const credentialParams = [
             `--provider ${this.__options.DATA_PROTECT_SERVER_PROVIDER}`,
             `--key ${this.__options.DATA_PROTECT_SERVER_KEY}`,
             `--secret ${this.__options.DATA_PROTECT_SERVER_SECRET}`,
-            `--profile build-${this.__options.DATA_PROTECT_SERVER_NAME}`,
+            `--profile ${this.getProfileName()}`,
             `--overwrite`
         ];
 
+        this.execCommand(`${this.__serverlessCmd} config credentials ${credentialParams.join(' ')}`);
+    }
+
+    publish() {
+        this.configCredentials();
+
         const deployParams = [
             `--stage ${this.__stage}`,
-            `--aws-profile build-${this.__options.DATA_PROTECT_SERVER_NAME}`,
+            `--aws-profile ${this.getProfileName()}`,
             `--region ${this.__options.DATA_PROTECT_SERVER_REGION}`
         ];
 
-        const stdout = this.execCommand(`${this.__serverlessCmd} config credentials ${credentialParams.join(' ')}; ${this.__serverlessCmd} deploy ${deployParams.join(' ')}`);
+        const stdout = this.execCommand(`${this.__serverlessCmd} deploy ${deployParams.join(' ')}`);
         if (stdout) {
             this.persistDataFromServerless(stdout);
         }
@@ -246,6 +259,10 @@ class ServerlessUtil {
 
     getPublicUrl() {
         return this.__options.public_url;
+    }
+
+    removeBuildFolder() {
+        fse.removeSync(this.__buildFolder);
     }
 }
 

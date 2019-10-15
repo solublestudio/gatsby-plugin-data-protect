@@ -184,3 +184,9 @@ exports.onCreateDevServer = ({ app }) => {
         });
     }
 }
+
+exports.onPostBuild = () => {
+    if (IS_BUILD) {
+        slsUtil.removeBuildFolder();
+    }
+}

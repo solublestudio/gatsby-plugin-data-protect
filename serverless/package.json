@@ -6,9 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
-    "airtable": "^0.7.1"
-  },
-  "devDependencies": {
+    "airtable": "^0.7.1",
     "serverless": "^1.53.0"
   }
 }
