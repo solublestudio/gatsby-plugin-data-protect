@@ -35,7 +35,6 @@ export const dispatchEvent = (dom, eventName, data = {}) => {
 
 export const hookLoginForm = (loginUrl, version) => {
     const form = document.getElementById('data-protect-form');
-    console.log(loginUrl, version);
     if (!form) {
         return;
     }
