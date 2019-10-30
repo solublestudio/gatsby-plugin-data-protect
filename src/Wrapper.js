@@ -15,13 +15,17 @@ const hasData = sensitiveKeys => {
     return uuids.length && getStoredValue(uuids[0]) ? true : false;
 }
 
-const timeoutNavigate = (path = null, startTime = 0) => {
+const timeoutNavigate = (path = null, startTime = 0, state = {}) => {
     const endTime = Date.now();
     const difference = endTime - startTime;
 
     setTimeout(() => {
-        navigate(path, { replace: false });
+        navigate(path, { replace: false, state });
     }, Math.max(difference, 500));
+}
+
+const removeFromLoadingValue = () => {
+    removeValue('data-protect-from-loading');
 }
 
 export default ({ children, ...props }) => {
@@ -30,6 +34,7 @@ export default ({ children, ...props }) => {
     
     useEffect(() => {
         if (!props.pageContext.dataProtectValues) {
+            removeFromLoadingValue();
             setData(props);
             return;
         }
@@ -50,18 +55,24 @@ export default ({ children, ...props }) => {
             if (!data) {
                 setData(props);
             }
+
+            if (typeof window !== 'undefined' && window.history && window.history.state && window.history.state.isFromLoading) {
+                storeValue('data-protect-from-loading', 1);
+            }
             
             return;
         }
         
         if (hasData(sensitiveKeys)) {
+            removeFromLoadingValue();
             setData(getNewProps(props, sensitiveKeys));
             return;
         }
         
         if (!isLoadingPage) {
+            removeFromLoadingValue();
             storeValue('data-protect-redirect', props.path);
-            navigate(loadingPath, { replace: false });
+            navigate(loadingPath, { replace: false });
             return;
         } else if (!data) {
             setData(props);
@@ -71,7 +82,15 @@ export default ({ children, ...props }) => {
         const startTime = Date.now();
         
         if ((!isLoadingPage && !prevPath) || !token) {
-            timeoutNavigate(loginPath, startTime);
+            if (isLoadingPage && getStoredValue('data-protect-from-loading')) {
+                removeFromLoadingValue();
+                if (typeof window !== 'undefined' && window.history) {
+                    window.history.go(-2);
+                    return;
+                }
+            }
+
+            timeoutNavigate(loginPath, startTime, isLoadingPage ? { isFromLoading: true } : {});
             return;
         }
 
