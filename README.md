@@ -119,6 +119,14 @@ DATA_PROTECT_MAIL_SUBJECT=Access for private content # Email subject
 DATA_PROTECT_MAIL_TEMPLATE=login-email.html # Email template you want to use. Check email.html inside serverless folder.
 ```
 
+
+## Development mode
+
+When you are in development, the API behaviour is mocked in Gatsby DEV server, using the `http://localhost:8000/___dataprotect/login` URL.
+For this, you can use `demo@demo.demo` as the email that has access to the content.
+To replicate login (what happens when the user clicks on the email's link), you can use `http://localhost:8000/login/super_secret_token` (in case you use the `8000` port, and `login` as login path)
+
+
 ## License
 
 Created by [Soluble Studio](https://www.solublestudio.com/). Released under the [MIT License](https://github.com/solublestudio/gatsby-plugin-data-protect/blob/master/LICENSE).

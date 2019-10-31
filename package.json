@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
-    "airtable": "^0.7.1",
+    "airtable": "^0.7.2",
     "dotenv": "^8.1.0",
     "fs-extra": "^8.1.0",
     "replace": "^1.1.1",
